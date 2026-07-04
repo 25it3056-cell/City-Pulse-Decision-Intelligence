@@ -1,0 +1,141 @@
+{
+  "hospitals": [
+    {
+      "id": "h1",
+      "name": "Metro General Hospital",
+      "sector": "Sector 1 (Downtown)",
+      "totalBeds": 120,
+      "availableBeds": 14,
+      "appointments": 45,
+      "doctors": 18,
+      "lat": 40.7128,
+      "lng": -74.0060,
+      "type": "General Hospital"
+    },
+    {
+      "id": "h2",
+      "name": "St. Jude Wellness Clinic",
+      "sector": "Sector 3 (Northside)",
+      "totalBeds": 45,
+      "availableBeds": 19,
+      "appointments": 12,
+      "doctors": 6,
+      "lat": 40.7306,
+      "lng": -73.9352,
+      "type": "Community Clinic"
+    },
+    {
+      "id": "h3",
+      "name": "Valley Children Health",
+      "sector": "Sector 5 (East End)",
+      "totalBeds": 60,
+      "availableBeds": 2,
+      "appointments": 28,
+      "doctors": 9,
+      "lat": 40.7589,
+      "lng": -73.9851,
+      "type": "Pediatric Clinic"
+    },
+    {
+      "id": "h4",
+      "name": "Beacon Community Health",
+      "sector": "Sector 2 (West Hills)",
+      "totalBeds": 35,
+      "availableBeds": 24,
+      "appointments": 8,
+      "doctors": 4,
+      "lat": 40.7061,
+      "lng": -74.0170,
+      "type": "Community Clinic"
+    },
+    {
+      "id": "h5",
+      "name": "Sector 4 Urgent Care",
+      "sector": "Sector 4 (Southside)",
+      "totalBeds": 20,
+      "availableBeds": 8,
+      "appointments": 15,
+      "doctors": 5,
+      "lat": 40.6782,
+      "lng": -73.9442,
+      "type": "Urgent Care"
+    }
+  ],
+  "outbreaks": {
+    "currentWeek": 26,
+    "diseases": [
+      {
+        "name": "Influenza",
+        "currentCases": 142,
+        "previousCases": 118,
+        "riskLevel": "Moderate",
+        "color": "amber",
+        "history": [45, 52, 60, 75, 90, 110, 118, 142]
+      },
+      {
+        "name": "Dengue",
+        "currentCases": 38,
+        "previousCases": 15,
+        "riskLevel": "High",
+        "color": "coral",
+        "history": [2, 4, 8, 12, 15, 22, 28, 38]
+      },
+      {
+        "name": "Gastroenteritis",
+        "currentCases": 64,
+        "previousCases": 72,
+        "riskLevel": "Low",
+        "color": "emerald",
+        "history": [80, 85, 78, 70, 74, 68, 72, 64]
+      }
+    ]
+  },
+  "sentiment": {
+    "score": 72,
+    "totalFeedbacks": 412,
+    "breakdown": {
+      "positive": 60,
+      "neutral": 25,
+      "negative": 15
+    },
+    "comments": [
+      {
+        "text": "St. Jude Clinic has very polite staff. Got my checkup done in 15 minutes.",
+        "sentiment": "positive",
+        "timestamp": "2 hours ago",
+        "sector": "Sector 3"
+      },
+      {
+        "text": "Long waiting lines at Valley Children Hospital. Only 2 pediatricians on duty.",
+        "sentiment": "negative",
+        "timestamp": "4 hours ago",
+        "sector": "Sector 5"
+      },
+      {
+        "text": "The recycling program in Sector 2 is average. Could be better organized.",
+        "sentiment": "neutral",
+        "timestamp": "6 hours ago",
+        "sector": "Sector 2"
+      },
+      {
+        "text": "Dengue alerts in Sector 4 are helpful. Preventive spraying started today.",
+        "sentiment": "positive",
+        "timestamp": "12 hours ago",
+        "sector": "Sector 4"
+      },
+      {
+        "text": "Very hard to book an appointment online for Metro General.",
+        "sentiment": "negative",
+        "timestamp": "1 day ago",
+        "sector": "Sector 1"
+      }
+    ],
+    "keywords": [
+      { "text": "App booking", "count": 48 },
+      { "text": "Bed shortage", "count": 32 },
+      { "text": "Friendly staff", "count": 55 },
+      { "text": "Wait time", "count": 61 },
+      { "text": "Cleanliness", "count": 37 }
+    ]
+  }
+}

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityPulse - AI Community Wellness & Decision Intelligence Platform</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div class="brand-name">
+                    <h1>CityPulse</h1>
+                    <span>Decision Intelligence</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-view="dashboard">
+                        <a href="#"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+                    </li>
+                    <li class="nav-item" data-view="map">
+                        <a href="#"><i class="fa-solid fa-map-location-dot"></i> <span>Interactive Map</span></a>
+                    </li>
+                    <li class="nav-item" data-view="predictions">
+                        <a href="#"><i class="fa-solid fa-brain"></i> <span>Predictions & AI</span></a>
+                    </li>
+                    <li class="nav-item" data-view="feedback">
+                        <a href="#"><i class="fa-solid fa-comments"></i> <span>Citizen Feedback</span></a>
+                    </li>
+                    <li class="nav-item" data-view="settings">
+                        <a href="#"><i class="fa-solid fa-sliders"></i> <span>Settings</span></a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <div class="pulse-dot green"></div>
+                    <div class="status-details">
+                        <p class="status-label">System Active</p>
+                        <p class="status-subtext">API Online (Port 3000)</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <div class="search-bar-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="global-search" placeholder="Ask CityPulse (e.g. 'Sector 3 beds', 'dengue risk'...)">
+                        <span class="search-badge">AI Query</span>
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <!-- Design System Switcher Dropdown -->
+                    <div class="design-system-picker" id="design-system-trigger">
+                        <i class="fa-solid fa-palette picker-icon"></i>
+                        <span class="picker-selected-label" id="picker-selected-text">Glassmorphism</span>
+                        <i class="fa-solid fa-chevron-down caret"></i>
+                        <div class="design-dropdown" id="design-dropdown">
+                            <div class="dropdown-header">
+                                <h3>Select UI Framework</h3>
+                            </div>
+                            <ul class="design-list" id="design-system-list">
+                                <li class="design-item active" data-theme="default">
+                                    <span class="theme-color default-color"></span>
+                                    <div class="theme-info">
+                                        <p class="theme-name">Glassmorphic Glow (Default)</p>
+                                        <p class="theme-desc">Translucent backdrop-blurs & neon icons</p>
+                                    </div>
+                                </li>
+                                <li class="design-item" data-theme="tailwind">
+                                    <span class="theme-color tailwind-color"></span>
+                                    <div class="theme-info">
+                                        <p class="theme-name">Tailwind CSS</p>
+                                        <p class="theme-desc">Utility-first flat indigo/slate accenting</p>
+                                    </div>
+                                </li>
+                                <li class="design-item" data-theme="bootstrap">
+                                    <span class="theme-color bootstrap-color"></span>
+                                    <div class="theme-info">
+                                        <p class="theme-name">Bootstrap Theme</p>
+                                        <p class="theme-desc">Classic blue primary cards & rounded borders</p>
+                                    </div>
+                                </li>
+                                <li class="design-item" data-theme="material">
+                                    <span class="theme-color material-color"></span>
+                                    <div class="theme-info">
+                                        <p class="theme-name">Material Design 3 (Google)</p>
+                                        <p class="theme-desc">Google design system with purple surfaces</p>
+                                    </div>
+                                </li>
+                                <li class="design-item" data-theme="chakra">
+                                    <span class="theme-color chakra-color"></span>
+                                    <div class="theme-info">
+                                        <p class="theme-name">Chakra UI Aesthetic</p>
+                                        <p class="theme-desc">Teal branding colors & crisp outlines</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="notification-bell" id="notification-trigger">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="bell-badge">3</span>
+                        <div class="notification-dropdown" id="notification-dropdown">
+                            <div class="dropdown-header">
+                                <h3>Active Alerts</h3>
+                                <a href="#" id="clear-notifications">Clear All</a>
+                            </div>
+                            <ul class="notification-list" id="notification-list">
+                                <li class="alert-item warning">
+                                    <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                    <div class="alert-info">
+                                        <p class="alert-title">Dengue Spike Detected</p>
+                                        <p class="alert-desc">Case count in Sector 4 is nearing high threshold. Vector control recommended.</p>
+                                        <span class="alert-time">10 mins ago</span>
+                                    </div>
+                                </li>
+                                <li class="alert-item critical">
+                                    <div class="alert-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+                                    <div class="alert-info">
+                                        <p class="alert-title">Critical Bed Shortage</p>
+                                        <p class="alert-desc">Valley Children Health has only 2 pediatric beds remaining.</p>
+                                        <span class="alert-time">1 hour ago</span>
+                                    </div>
+                                </li>
+                                <li class="alert-item info">
+                                    <div class="alert-icon"><i class="fa-solid fa-info"></i></div>
+                                    <div class="alert-info">
+                                        <p class="alert-title">Feedback Milestone</p>
+                                        <p class="alert-desc">Citizen feedback score improved to 72% positive today.</p>
+                                        <span class="alert-time">2 hours ago</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Accessibility Indicator -->
+                    <div class="accessibility-badge" title="Accessibility Configured">
+                        <i class="fa-solid fa-universal-access"></i>
+                    </div>
+
+                    <!-- Profile Info -->
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div class="user-details">
+                            <p class="user-name">Dr. Sarah Connor</p>
+                            <p class="user-role">City Health Officer</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic Views Container -->
+            <div class="view-content">
+                
+                <!-- 1. DASHBOARD VIEW -->
+                <section id="view-dashboard" class="app-view active">
+                    <!-- KPI Cards Row -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Clinic Beds Available</span>
+                                <div class="kpi-icon gradient-cyan"><i class="fa-solid fa-bed"></i></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-beds-value">67</div>
+                            <div class="kpi-subtext green-text">
+                                <i class="fa-solid fa-circle-check"></i> <span>23% capacity free</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Citizen Sentiment Score</span>
+                                <div class="kpi-icon gradient-purple"><i class="fa-solid fa-face-smile"></i></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-sentiment-value">72%</div>
+                            <div class="kpi-subtext green-text">
+                                <i class="fa-solid fa-arrow-trend-up"></i> <span>+4% positive increase</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Active Outbreak Level</span>
+                                <div class="kpi-icon gradient-coral"><i class="fa-solid fa-biohazard"></i></div>
+                            </div>
+                            <div class="kpi-value alert-coral-text" id="kpi-outbreak-value">Moderate</div>
+                            <div class="kpi-subtext coral-text">
+                                <i class="fa-solid fa-arrow-trend-up"></i> <span>Dengue spike in progress</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Active Recommendations</span>
+                                <div class="kpi-icon gradient-gold"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-recs-value">4</div>
+                            <div class="kpi-subtext text-muted">
+                                <span>AI allocation plan ready</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid -->
+                    <div class="dashboard-grid">
+                        <!-- Left Panel: Bed Capacity & Service Availability -->
+                        <div class="grid-card col-8">
+                            <div class="card-header">
+                                <h2>Health Service Availability & Real-Time Booking</h2>
+                                <p class="card-subtitle">Real-time status of clinics, bed counts, and on-duty doctors</p>
+                            </div>
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Facility Name</th>
+                                            <th>Location Sector</th>
+                                            <th>Capacity Stats</th>
+                                            <th>Beds Available</th>
+                                            <th>On-Duty Doctors</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="hospitals-table-body">
+                                        <!-- Dynamically generated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Predictive Outbreaks Sparklines -->
+                        <div class="grid-card col-4">
+                            <div class="card-header font-outfit">
+                                <h2>Outbreak Alerts (Current Week)</h2>
+                                <p class="card-subtitle">Disease tracking & active infection risk levels</p>
+                            </div>
+                            <div class="disease-list" id="disease-list-container">
+                                <!-- Dynamically generated disease alerts -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Secondary Row: Bed Occupancy Chart & Dynamic Recommender -->
+                    <div class="dashboard-grid mt-4">
+                        <div class="grid-card col-6">
+                            <div class="card-header">
+                                <h2>Weekly Hospital Bed Occupancy Trends</h2>
+                                <p class="card-subtitle">Aggregated bed occupancy patterns across all Sectors</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="bedOccupancyChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-card col-6">
+                            <div class="card-header">
+                                <h2>AI-Powered Resource Allocation Plan</h2>
+                                <p class="card-subtitle">Automated recommendations based on predictive analytics models</p>
+                            </div>
+                            <div class="recommendations-container" id="recs-list">
+                                <div class="recommendation-item">
+                                    <div class="rec-icon info"><i class="fa-solid fa-truck-medical"></i></div>
+                                    <div class="rec-body">
+                                        <h4>Reallocate Beds to Sector 5</h4>
+                                        <p>Valley Children Health (Sector 5) has hit 96% occupancy. Reallocate 5 portable pediatric beds from Beacon Health (Sector 2) which is operating at only 31% capacity.</p>
+                                        <button class="action-btn small" onclick="applyRecommendation('reallocate')">Execute Plan</button>
+                                    </div>
+                                </div>
+                                <div class="recommendation-item">
+                                    <div class="rec-icon warning"><i class="fa-solid fa-spray-can-sparkles"></i></div>
+                                    <div class="rec-body">
+                                        <h4>Deploy Vector Spraying to Sector 4</h4>
+                                        <p>Dengue cases in Sector 4 are projected to rise by 40% next week due to high humidity levels. Deploy spraying units immediately to mitigate breeding zones.</p>
+                                        <button class="action-btn small" onclick="applyRecommendation('spraying')">Execute Plan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. MAP VIEW -->
+                <section id="view-map" class="app-view">
+                    <div class="map-view-container">
+                        <div class="map-sidebar">
+                            <h3>Map Overlays</h3>
+                            <p class="section-desc">Toggle different layers to view various parameters of city wellness.</p>
+                            
+                            <div class="layer-control-group">
+                                <label class="layer-switch">
+                                    <input type="checkbox" id="layer-clinics" checked>
+                                    <span class="slider-round"></span>
+                                    <span>Clinic Locations</span>
+                                </label>
+                                <label class="layer-switch">
+                                    <input type="checkbox" id="layer-outbreaks" checked>
+                                    <span class="slider-round"></span>
+                                    <span>Outbreak Heatmap</span>
+                                </label>
+                                <label class="layer-switch">
+                                    <input type="checkbox" id="layer-sentiment" checked>
+                                    <span class="slider-round"></span>
+                                    <span>Sentiment Hotspots</span>
+                                </label>
+                            </div>
+                            
+                            <div class="map-legend">
+                                <h4>Risk Indicators</h4>
+                                <div class="legend-item"><span class="legend-dot coral"></span><span>High Disease Density</span></div>
+                                <div class="legend-item"><span class="legend-dot green"></span><span>High Sentiment Score</span></div>
+                                <div class="legend-item"><span class="legend-dot blue"></span><span>Healthcare Centers</span></div>
+                            </div>
+                        </div>
+                        <div class="map-wrapper">
+                            <div id="leaflet-map-element"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. PREDICTIONS & AI SIMULATOR VIEW -->
+                <section id="view-predictions" class="app-view">
+                    <div class="dashboard-grid">
+                        <div class="grid-card col-4">
+                            <div class="card-header">
+                                <h2>Outbreak Predictive Simulator</h2>
+                                <p class="card-subtitle">Adjust environmental variables to forecast disease risk trends</p>
+                            </div>
+                            
+                            <div class="simulator-panel">
+                                <div class="slider-group">
+                                    <div class="slider-label">
+                                        <span>Rainfall / Humidity</span>
+                                        <span id="slider-val-humidity">50%</span>
+                                    </div>
+                                    <input type="range" id="sim-humidity" min="0" max="100" value="50" class="sim-slider">
+                                    <span class="slider-help">Affects breeding speed of vectors like Dengue mosquitoes.</span>
+                                </div>
+
+                                <div class="slider-group">
+                                    <div class="slider-label">
+                                        <span>Population Mobility Index</span>
+                                        <span id="slider-val-mobility">1.0x</span>
+                                    </div>
+                                    <input type="range" id="sim-mobility" min="5" max="25" value="10" class="sim-slider">
+                                    <span class="slider-help">Increases transmission rates of airborne viruses like Influenza.</span>
+                                </div>
+
+                                <div class="slider-group">
+                                    <div class="slider-label">
+                                        <span>Average Temp (°C)</span>
+                                        <span id="slider-val-temp">22°C</span>
+                                    </div>
+                                    <input type="range" id="sim-temp" min="10" max="40" value="22" class="sim-slider">
+                                    <span class="slider-help">Drives gastroenteritis risk levels in higher temperatures.</span>
+                                </div>
+
+                                <button class="action-btn full-width" id="btn-run-simulation">
+                                    <i class="fa-solid fa-calculator"></i> Run Disease Simulation
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid-card col-8">
+                            <div class="card-header">
+                                <h2>Simulated Infection Growth (8-Week Trend Projection)</h2>
+                                <p class="card-subtitle">AI predicted disease models based on current environmental inputs</p>
+                            </div>
+                            <div class="chart-container large">
+                                <canvas id="outbreakPredictiveChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. CITIZEN FEEDBACK VIEW -->
+                <section id="view-feedback" class="app-view">
+                    <div class="dashboard-grid">
+                        <div class="grid-card col-4">
+                            <div class="card-header">
+                                <h2>Community Satisfaction</h2>
+                                <p class="card-subtitle">Aggregate wellness sentiment tracker</p>
+                            </div>
+                            
+                            <div class="sentiment-box">
+                                <div class="sentiment-score-large" id="sentiment-score-display">72%</div>
+                                <p class="sentiment-rating green-text">Mostly Positive Sentiment</p>
+                                
+                                <div class="sentiment-breakdown mt-4">
+                                    <div class="breakdown-bar">
+                                        <div class="segment positive" style="width: 60%" id="bar-positive"></div>
+                                        <div class="segment neutral" style="width: 25%" id="bar-neutral"></div>
+                                        <div class="segment negative" style="width: 15%" id="bar-negative"></div>
+                                    </div>
+                                    
+                                    <div class="breakdown-labels">
+                                        <span class="lbl-pos"><i class="fa-solid fa-circle green-text"></i> Positive (<span id="lbl-val-pos">60</span>%)</span>
+                                        <span class="lbl-neu"><i class="fa-solid fa-circle text-muted"></i> Neutral (<span id="lbl-val-neu">25</span>%)</span>
+                                        <span class="lbl-neg"><i class="fa-solid fa-circle alert-coral-text"></i> Negative (<span id="lbl-val-neg">15</span>%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="keyword-cloud mt-4">
+                                <h3>Trending Feedback Keywords</h3>
+                                <div class="keyword-tags" id="keyword-cloud-tags">
+                                    <!-- Dynamic -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-card col-8">
+                            <div class="card-header">
+                                <h2>Recent Citizen Reports & Feedback Comments</h2>
+                                <p class="card-subtitle">Live citizens comments analyzed for sentiment and health priority</p>
+                            </div>
+                            
+                            <!-- Submit Feedback -->
+                            <div class="feedback-submit-box">
+                                <h3>Submit Citizen Wellness Report</h3>
+                                <form id="feedback-form">
+                                    <div class="form-row">
+                                        <div class="form-group col-8">
+                                            <input type="text" id="fb-text" placeholder="Enter wellness report (e.g. 'Very clean service at St. Jude Clinic')" required>
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <select id="fb-sector">
+                                                <option value="Sector 1">Sector 1 (Downtown)</option>
+                                                <option value="Sector 2">Sector 2 (West Hills)</option>
+                                                <option value="Sector 3">Sector 3 (Northside)</option>
+                                                <option value="Sector 4">Sector 4 (Southside)</option>
+                                                <option value="Sector 5">Sector 5 (East End)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="action-btn">
+                                        <i class="fa-solid fa-paper-plane"></i> Submit Feedback
+                                    </button>
+                                </form>
+                            </div>
+
+                            <div class="feedback-list" id="feedback-comments-list">
+                                <!-- Dynamic comments -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. SETTINGS VIEW -->
+                <section id="view-settings" class="app-view">
+                    <div class="grid-card col-6">
+                        <div class="card-header">
+                            <h2>Platform Settings & Accessibility Options</h2>
+                            <p class="card-subtitle">Configure application settings and visual layouts</p>
+                        </div>
+                        
+                        <div class="settings-panel">
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <h4>Aesthetic Framework UI</h4>
+                                    <p>Reshape layout and styling parameters (Tailwind, Bootstrap, Material, Chakra).</p>
+                                </div>
+                                <select id="setting-design-system" style="padding: 8px 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--surface-border); border-radius: 4px; color: #fff; outline: none; font-family: var(--font-body); font-size: 13px;">
+                                    <option value="default" style="background: var(--bg-color);">Glassmorphism (Default)</option>
+                                    <option value="tailwind" style="background: var(--bg-color);">Tailwind CSS (Utility slate/indigo)</option>
+                                    <option value="bootstrap" style="background: var(--bg-color);">Bootstrap (Classic outline blue)</option>
+                                    <option value="material" style="background: var(--bg-color);">Material Design 3 (Google purple)</option>
+                                    <option value="chakra" style="background: var(--bg-color);">Chakra UI (Sleek rounded teal)</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <h4>High Contrast Mode</h4>
+                                    <p>Enhance readability using black and glowing neon palettes.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="setting-high-contrast">
+                                    <span class="slider-round"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <h4>Text Scale Sizing</h4>
+                                    <p>Increase or decrease standard font size thresholds.</p>
+                                </div>
+                                <div class="font-size-controls">
+                                    <button class="font-btn" onclick="adjustFontSize(-2)">A-</button>
+                                    <button class="font-btn active" id="font-btn-normal" onclick="adjustFontSize(0)">A</button>
+                                    <button class="font-btn" onclick="adjustFontSize(2)">A+</button>
+                                </div>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <h4>Voice Synthesizer Guidance</h4>
+                                    <p>Screen-reader accessibility aid via audio summaries.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="setting-speech">
+                                    <span class="slider-round"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-row">
+                                <div class="setting-info">
+                                    <h4>Reset Mock Database State</h4>
+                                    <p>Restore the platform to the initial data model definitions.</p>
+                                </div>
+                                <button class="action-btn warning" id="btn-reset-db">Reset State</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Floating Chat Assistant Widget -->
+    <div class="ai-chat-widget collapsed" id="ai-chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header" id="chat-header-bar">
+            <div class="chat-title-info">
+                <div class="chat-avatar"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <h4>CityPulse AI Assistant</h4>
+                    <span class="status-online"><i class="fa-solid fa-circle"></i> Online</span>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button id="chat-toggle-size" title="Toggle Fullscreen"><i class="fa-solid fa-expand"></i></button>
+                <button id="chat-close" title="Minimize"><i class="fa-solid fa-minus"></i></button>
+            </div>
+        </div>
+
+        <!-- Chat Output -->
+        <div class="chat-body" id="chat-body-scroll">
+            <div class="chat-message bot">
+                <p>Hello! I am the CityPulse Decision Intelligence assistant. Ask me questions about clinic beds, outbreaks, or public sentiments in our city. Or click a quick action below:</p>
+            </div>
+            <div class="suggestion-chips" id="suggestion-chips-box">
+                <button class="chip" onclick="sendQuickMessage('beds in Sector 3')">Free beds in Sector 3</button>
+                <button class="chip" onclick="sendQuickMessage('check outbreaks')">Check disease alerts</button>
+                <button class="chip" onclick="sendQuickMessage('citizen sentiment')">Show public feedback</button>
+                <button class="chip" onclick="sendQuickMessage('go to maps')">Open live map</button>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-footer">
+            <input type="text" id="chat-input-field" placeholder="Ask AI wellness assistant...">
+            <button id="chat-send-btn" class="chat-send"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- AI Mini Floating Action Bubble -->
+    <button class="chat-float-btn" id="chat-float-btn-trigger">
+        <i class="fa-solid fa-comment-dots"></i>
+        <span class="float-pulse"></span>
+    </button>
+
+    <!-- Hospital Booking Modal Dialog -->
+    <div class="modal" id="booking-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>Book Health Appointment</h2>
+                <button class="close-modal" id="close-booking-modal">&times;</button>
+            </div>
+            <form id="booking-form">
+                <input type="hidden" id="booking-hospital-id">
+                <div class="modal-body">
+                    <p class="booking-summary-text" id="booking-facility-summary">Reserving bed at Metro General Hospital.</p>
+                    <div class="form-group mt-3">
+                        <label for="book-patient-name">Patient Full Name</label>
+                        <input type="text" id="book-patient-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="book-symptoms">Brief Symptom Report</label>
+                        <input type="text" id="book-symptoms" placeholder="High fever and dry cough" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="action-btn secondary" id="btn-cancel-booking">Cancel</button>
+                    <button type="submit" class="action-btn">Confirm Reservation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast Notification popup -->
+    <div class="toast" id="toast-notification">
+        <div class="toast-icon" id="toast-icon-div"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="toast-message" id="toast-msg-text">Success message details!</div>
+    </div>
+
+    <!-- Leaflet JS Library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Client Application JS logic -->
+    <script src="app.js"></script>
+</body>
+</html>
